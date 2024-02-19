@@ -87,3 +87,16 @@ resource "aws_instance" "newsletter_instance" {
     ]
   }
 }
+
+# deleting the private key when terminating the instance.
+resource "null_resource" "delete_key" {
+  triggers = {
+    key_path = "${var.private_key_path}/${var.keyname}.pem" 
+    }
+provisioner "local-exec" {
+  when = destroy
+  command = "rm -f ${self.triggers.key_path}"
+  on_failure = continue // This allows the destroy provisioner to not fail even if the file doesn't exist.
+}
+depends_on = [ aws_key_pair.deployer ]
+}
