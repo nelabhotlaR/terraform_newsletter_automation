@@ -1,0 +1,2 @@
+# terraform_newsletter_automation
+Terraform configuration files to deploy newsletter_automation app
